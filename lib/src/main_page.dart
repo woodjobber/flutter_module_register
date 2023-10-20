@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boost/flutter_boost.dart';
+import 'package:flutter_module_register/src/app_localizations.dart';
+import 'package:flutter_module_register/src/locale_notifier.dart';
 import 'package:flutter_module_register/src/navigator.dart';
+import 'package:provider/provider.dart';
 
 class Model {
   Model(this.title, this.onTap);
@@ -161,12 +164,49 @@ class MainPageState extends State<MainPage> {
       child: Scaffold(
         key: key,
         appBar: CupertinoNavigationBar(
+          brightness: Theme.of(context).brightness,
+          backgroundColor: Theme.of(context).primaryColor,
+          trailing: ElevatedButton(
+              child: const Text('切换语言'),
+              onPressed: () {
+                final dialog = SimpleDialog(
+                  children: [
+                    SimpleDialogOption(
+                      onPressed: () {
+                        context.read<LocaleNotifier>().updateLanguage('zh');
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        child: Text(AppLocale.current.settingLanguageChinese),
+                      ),
+                    ),
+                    SimpleDialogOption(
+                      onPressed: () {
+                        context.read<LocaleNotifier>().updateLanguage('en');
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        child: Text(AppLocale.current.settingLanguageEnglish),
+                      ),
+                    ),
+                  ],
+                );
+                showDialog(
+                  context: context,
+                  builder: (ctx) => dialog,
+                );
+              }),
           leading: CupertinoNavigationBarBackButton(
             onPressed: () {
               Chief.pop();
             },
           ),
-          middle: const Text('FlutterBoost Example'),
+          middle: Text(
+            AppLocale.current.title,
+            style: TextStyle(color: Theme.of(context).primaryColorLight),
+          ),
         ),
         bottomNavigationBar: _buildBottomBar(),
         body: CustomScrollView(
@@ -244,15 +284,19 @@ class MainPageState extends State<MainPage> {
 
   Widget _buildBottomBar() {
     return Container(
-      color: Colors.grey[200],
+      color: Theme.of(context).primaryColor,
       padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).padding.bottom + 10, top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             'with container',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColorLight,
+            ),
           ),
           ValueListenableBuilder(
             valueListenable: withContainer,

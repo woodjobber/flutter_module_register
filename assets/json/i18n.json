@@ -1,0 +1,12 @@
+{
+  "en": {
+    "title": "Intl Demo",
+    "settingLanguageEnglish": "English",
+    "settingLanguageChinese": "Chinese"
+  },
+  "zh": {
+    "title": "国际化 Demo",
+    "settingLanguageEnglish": "英文",
+    "settingLanguageChinese": "中文"
+  }
+}

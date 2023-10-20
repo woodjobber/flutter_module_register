@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mmkv/mmkv.dart';
 
-import 'boost_main.dart';
-import 'host_main.dart';
+import 'src/boost_main.dart';
+import 'src/host_main.dart';
 
 //void main() => runApp(const MyApp());
 
@@ -13,7 +14,10 @@ import 'host_main.dart';
 //       source: 'main',
 //     ));
 
-void main() => bootMain();
+void main() async {
+  // must wait for MMKV to finish initialization
+  bootMain();
+}
 
 @pragma('vm:entry-point')
 void topMain() => runApp(const TimApp(

@@ -1,19 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boost/flutter_boost.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_module_register/src/locale_notifier.dart';
+import 'package:mmkv/mmkv.dart';
+import 'package:provider/provider.dart';
 
+import '../generated/l10n.dart';
+import 'app_localizations.dart';
 import 'dialog_page.dart';
 import 'lifecycle_test_page.dart';
 import 'main_page.dart';
 import 'replacement_page.dart';
 import 'simple_page.dart';
 
-void bootMain() {
+void bootMain() async {
   ///添加全局生命周期监听类
   PageVisibilityBinding.instance.addGlobalObserver(AppLifecycleObserver());
 
   ///这里的CustomFlutterBinding调用务必不可缺少，用于控制Boost状态的resume和pause
   CustomFlutterBinding();
+  await MMKV.initialize();
   runApp(const MyApp());
 }
 
@@ -136,14 +143,47 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget appBuilder(Widget home) {
-    return MaterialApp(
-      home: home,
-      debugShowCheckedModeBanner: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LocaleNotifier()),
+      ],
+      child: Consumer<LocaleNotifier>(
+        builder: (context, currentLocal, child) {
+          debugPrint("=======");
+          return MaterialApp(
+            home: home,
+            theme: ThemeData(colorScheme: const ColorScheme.light()),
+            darkTheme: ThemeData(colorScheme: const ColorScheme.dark()),
+            themeMode: ThemeMode.dark,
+            debugShowCheckedModeBanner: true,
+            locale: currentLocal.locale,
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate, // 指定本地化的字符串和一些其他的值
+              GlobalCupertinoLocalizations.delegate, // 对应的Cupertino风格
+              GlobalWidgetsLocalizations.delegate, // 指定默认的文本排列方向, 由左到右或由右到左
+              AppLocale.delegate,
+              S.delegate,
+            ],
+            supportedLocales: const [
+              Locale.fromSubtags(languageCode: 'en'),
+              Locale.fromSubtags(languageCode: 'zh'),
+            ],
+            localeResolutionCallback: (locale, supportedLocales) {
+              debugPrint(locale.toString());
+              debugPrint(supportedLocales.toString());
+              if (supportedLocales.contains(locale)) {
+                return locale;
+              }
+              return const Locale('zh');
+            },
 
-      ///必须加上builder参数，否则showDialog等会出问题
-      builder: (_, __) {
-        return home;
-      },
+            ///必须加上builder参数，否则showDialog等会出问题
+            builder: (_, __) {
+              return home;
+            },
+          );
+        },
+      ),
     );
   }
 
