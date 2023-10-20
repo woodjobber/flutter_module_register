@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 export 'package:flutter_module_register/src/login_page.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({super.key});
   @override
   Widget build(BuildContext context) {
     stdout.writeln('注册');
