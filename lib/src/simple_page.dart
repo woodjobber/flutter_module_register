@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_boost/flutter_boost.dart';
-import 'package:flutter_module_register/navigator.dart';
+import 'navigator.dart';
 
 class SimplePage extends StatefulWidget {
   final String? data;

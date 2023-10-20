@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boost/flutter_boost.dart';
-import 'package:flutter_module_register/navigator.dart';
+import 'package:flutter_module_register/src/navigator.dart';
 
 class Model {
   Model(this.title, this.onTap);

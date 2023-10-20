@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_module_register/navigator.dart';
+import 'navigator.dart';
 
 class ReplacementPage extends StatefulWidget {
   const ReplacementPage({Key? key}) : super(key: key);
