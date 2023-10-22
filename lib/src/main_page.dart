@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boost/flutter_boost.dart';
@@ -156,7 +158,7 @@ class MainPageState extends State<MainPage> {
     ///You don't need to take care about the code below
     ///你不需要关心下面的UI代码
     ///==========================================================
-
+    stdout.writeln("mainPage....");
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();

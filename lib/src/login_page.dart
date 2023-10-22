@@ -6,7 +6,6 @@ class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
   @override
   Widget build(BuildContext context) {
-    stdout.writeln('注册');
     return MaterialApp(
       title: '注册',
       theme: ThemeData(

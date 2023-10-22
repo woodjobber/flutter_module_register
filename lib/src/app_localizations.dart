@@ -34,7 +34,8 @@ class AppLocale {
     if (_localizations.isNotEmpty) {
       return;
     }
-    final json = await rootBundle.loadString('assets/json/i18n.json');
+    final json = await rootBundle
+        .loadString('packages/flutter_module_register/assets/json/i18n.json');
     debugPrint(json);
     Map<String, dynamic> map = jsonDecode(json);
     _localizations =
@@ -43,7 +44,12 @@ class AppLocale {
 
   static Future<AppLocale> load(Locale locale) async {
     final appLocal = AppLocale(locale);
-    await appLocal.loadJson();
+    try {
+      await appLocal.loadJson();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
     AppLocale._current = appLocal;
     final mmkv = MMKV.defaultMMKV();
     final name = (locale.countryCode?.isEmpty ?? false)

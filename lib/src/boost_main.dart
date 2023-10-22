@@ -1,13 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boost/flutter_boost.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_module_register/src/locale_notifier.dart';
+import 'package:flutter_module_register/src/navigator.dart';
 import 'package:mmkv/mmkv.dart';
 import 'package:provider/provider.dart';
 
 import '../generated/l10n.dart';
 import 'app_localizations.dart';
+import 'custom_flutter_binding.dart';
 import 'dialog_page.dart';
 import 'lifecycle_test_page.dart';
 import 'main_page.dart';
@@ -23,10 +27,6 @@ void bootMain() async {
   await MMKV.initialize();
   runApp(const MyApp());
 }
-
-///创建一个自定义的Binding，继承和with的关系如下，里面什么都不用写
-class CustomFlutterBinding extends WidgetsFlutterBinding
-    with BoostFlutterBinding {}
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -48,6 +48,20 @@ class _MyAppState extends State<MyApp> {
   /// 如果用MaterialPageRoute的话同理
 
   static Map<String, FlutterBoostRouteFactory> routerMap = {
+    '/': (settings, uniqueId) {
+      return CupertinoPageRoute(
+          settings: settings,
+          builder: (_) {
+            Object? map = settings.arguments;
+            String data = '';
+            if (map is Map<String, dynamic>) {
+              data = map['data'] ?? '';
+            }
+            return MainPage(
+              data: data,
+            );
+          });
+    },
     'mainPage': (settings, uniqueId) {
       return CupertinoPageRoute(
           settings: settings,
@@ -149,7 +163,7 @@ class _MyAppState extends State<MyApp> {
       ],
       child: Consumer<LocaleNotifier>(
         builder: (context, currentLocal, child) {
-          debugPrint("=======");
+          debugPrint("======= $home");
           return MaterialApp(
             home: home,
             theme: ThemeData(colorScheme: const ColorScheme.light()),
@@ -191,7 +205,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return FlutterBoostApp(
       routeFactory,
-      appBuilder: appBuilder,
+      appBuilder: (home) {
+        return appBuilder(home);
+      },
     );
   }
 }
